@@ -6,8 +6,12 @@ import {
   IsString,
 } from 'class-validator';
 import { User } from '../../auth/schemas/user.schema';
+import { PrimaryGeneratedColumn } from 'typeorm';
 
 export class CreateTaskDto {
+
+  @PrimaryGeneratedColumn()
+  id: number;
   
   @IsNotEmpty()
   @IsString()
@@ -28,3 +32,5 @@ export class CreateTaskDto {
   @IsEmpty({ message: 'You cannot pass user id' })
   readonly user: User;
 }
+
+

@@ -1,15 +1,49 @@
+// import { Injectable, UnauthorizedException } from '@nestjs/common';
+// import { InjectModel } from '@nestjs/mongoose';
+// import { PassportStrategy } from '@nestjs/passport';
+// import { Model } from 'mongoose';
+// import { Strategy, ExtractJwt } from 'passport-jwt';
+// import { User } from './schemas/user.schema';
+
+// @Injectable()
+// export class JwtStrategy extends PassportStrategy(Strategy) {
+//   constructor(
+//     @InjectModel(User.name)
+//     private userModel: Model<User>,
+//   ) {
+//     super({
+//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+//       secretOrKey: process.env.JWT_SECRET,
+//     });
+//   }
+
+//   async validate(payload) {
+//     const { id } = payload;
+
+//     const user = await this.userModel.findById(id);
+
+//     if (!user) {
+//       throw new UnauthorizedException('Login first to access this endpoint.');
+//     }
+
+//     return user;
+//   }
+// }
+
+
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
 import { PassportStrategy } from '@nestjs/passport';
-import { Model } from 'mongoose';
+import { Repository } from 'typeorm';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { User } from './schemas/user.schema';
+
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @InjectModel(User.name)
-    private userModel: Model<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,7 +54,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload) {
     const { id } = payload;
 
-    const user = await this.userModel.findById(id);
+    const user = await this.userRepository.findOne(id);
 
     if (!user) {
       throw new UnauthorizedException('Login first to access this endpoint.');
@@ -29,3 +63,4 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return user;
   }
 }
+

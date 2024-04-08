@@ -1,0 +1,9 @@
+{
+    "type": "mongodb",
+    "host": "localhost",
+    "port": 27017,
+    "database": "task-management",
+    "useNewUrlParser": true,
+    "entities": ["dist/../**/*.entity.js'"],
+    "synchronize": true
+}
